@@ -1,11 +1,32 @@
-url = 'https://api.github.com/users/chiga2030';
+const userData = {
+	url: 'https://api.github.com/users/chiga2030',
 
-const getUsernameFromUrl = (url) => {
-	const parser = document.createElement('a');
-	parser.href = 'https://api.github.com/users/chiga2030';
-	const username = parser.pathname.split('/users/').filter((arr) => !!arr).toString();
-	return username;
+	username: function() {
+		const parser = document.createElement('a');
+		parser.href = this.url;
+		const username = parser.pathname.split('/users/').filter((arr) => !!arr).toString();
+		return username;
+	},
+
+	parseUserData: function() {
+		fetch(this.url)
+			.then(response => response.json())
+			.then(data => {
+				this.avatarUrl = data.avatar_url;
+				this.name = data.name;
+				this.bio = data.bio;
+				this.htmlUrl = data.html_url;
+			})
+			.then(test => new Promise(resolve) => {
+				
+			})
+	},
 }
 
-const username = getUsernameFromUrl(url);
 
+
+//fetchToGithub(userData.url)
+
+userData.parseUserData()
+
+//userData.getUsername();
