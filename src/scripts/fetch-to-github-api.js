@@ -1,32 +1,40 @@
-const userData = {
-	url: 'https://api.github.com/users/chiga2030',
-
-	username: function() {
-		const parser = document.createElement('a');
-		parser.href = this.url;
-		const username = parser.pathname.split('/users/').filter((arr) => !!arr).toString();
-		return username;
-	},
-
-	parseUserData: function() {
-		fetch(this.url)
-			.then(response => response.json())
-			.then(data => {
-				this.avatarUrl = data.avatar_url;
-				this.name = data.name;
-				this.bio = data.bio;
-				this.htmlUrl = data.html_url;
-			})
-			.then(test => new Promise(resolve) => {
-				
-			})
-	},
+const getParamFromUrl = key => {
+    let search = window.location.search;
+    const reg = '=([^&=]+)';
+    search = search.match(key + reg);
+    return search ? search[1] : false;
 }
 
+const hidePreloader = (preloaders) => {
+	for (let node of preloaders) {
+		node.classList.remove('preloader');
+	}
+}
 
+const preloaders = document.querySelectorAll('.preloader');
+const username = getParamFromUrl('username');
+const elAvatar = document.querySelector('.profile__avatar');
+const elName = document.querySelector('.profile__username');
+const elBio = document.querySelector('.profile__bio');
+const elProfileLink = document.querySelector('.profile__link-to-profile');
 
-//fetchToGithub(userData.url)
+const getUserData = () => {
+	const url = `https://api.github.com/users/${username}`;
+	fetch(url)
+		.then(response => {
+			if(response.ok) return response.json();
+			else if(response.status == 404)  throw new Error(`Ошибка: пользователь с ником ${username} не найден`);
+		})
+		.then(data => {
+			hidePreloader(preloaders);
+			elAvatar.src = data.avatar_url;
+			elAvatar.classList.remove('preloader');
+			elName.innerText = data.name;
+			elBio.innerText = data.bio;
+			elProfileLink.innerText = data.html_url;
+			elProfileLink.href = data.html_url;
+		})
+		.catch(e => alert(e.message))
+}
 
-userData.parseUserData()
-
-//userData.getUsername();
+setTimeout(() => getUserData(), 800);
