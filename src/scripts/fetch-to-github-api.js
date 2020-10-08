@@ -28,7 +28,6 @@ const getUserData = () => {
 		.then(data => {
 			hidePreloader(preloaders);
 			elAvatar.src = data.avatar_url;
-			elAvatar.classList.remove('preloader');
 			elName.innerText = data.name;
 			elBio.innerText = data.bio;
 			elProfileLink.innerText = data.html_url;
