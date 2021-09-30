@@ -4,7 +4,7 @@ const elName = document.querySelector('.profile__username');
 const elBio = document.querySelector('.profile__bio');
 const elProfileLink = document.querySelector('.profile__link-to-profile');
 const log = console.log;
-const username = 'chiga2030';
+const username = parseInt(new URLSearchParams(window.location.search).get("username"));
 
 const hidePreloader = (preloaders) => {
 	for (let node of preloaders) {
