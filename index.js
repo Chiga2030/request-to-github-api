@@ -3,9 +3,7 @@ const elAvatar = document.querySelector('.profile__avatar');
 const elName = document.querySelector('.profile__username');
 const elBio = document.querySelector('.profile__bio');
 const elProfileLink = document.querySelector('.profile__link-to-profile');
-const log = console.log;
-const username = parseInt(new URLSearchParams(window.location.search).get("username"));
-console.log(username);
+const username = new URLSearchParams(window.location.search).get("username");
 
 const hidePreloader = (preloaders) => {
 	for (let node of preloaders) {
@@ -13,15 +11,6 @@ const hidePreloader = (preloaders) => {
 	}
 }
 
-const getDate = new Promise(resolve => {
-	setTimeout(() => resolve(new Date), 2000);
-});
-
-const printDate = date => {
-	const elDate = document.createElement('p');
-	elDate.innerText = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()} ${date.toLocaleTimeString()}`;
-	document.body.prepend(elDate);
-}
 
 const getUserData = () => {
 	const url = `https://api.github.com/users/${username}`;
@@ -41,8 +30,4 @@ const getUserData = () => {
 		.catch(e => alert(e.message))
 };
 
-Promise.all([getDate, getUserData])
-	.then(([date, userData]) => {
-		printDate(date);
-		userData();
-	})
+setTimeout(() => getUserData(), 1000); // enjoy preloader
